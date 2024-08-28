@@ -1,7 +1,13 @@
+[web_servers]
 10.0.1.5
 10.0.1.6
+
+[db_servers]
 10.0.1.7
+
+[file_servers]
 10.0.1.8
+
 
 
 
