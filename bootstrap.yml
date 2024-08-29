@@ -1,0 +1,47 @@
+---
+
+- hosts: all
+  become: true
+  pre_tasks:
+
+  - name: install updates (CentOS)
+    tags: always 
+    dnf: 
+      update_only: yes
+      update_cache: yes
+    when: ansible_distribution == "CentOS"
+
+  - name: install updates (Ubuntu)
+    tags: always
+    apt:
+      upgrade: dist
+      update_cache: yes
+    when: ansible_distribution == "Ubuntu"
+
+
+- hosts: all
+  become: true
+  tasks: 
+
+  - name: create lulu user
+    tags: always
+    user: 
+      name: lulu
+      groups: root
+      
+
+  - name: add ssh key for lulu
+    tags: always
+    authorized_key:
+      user: lulu
+      key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFcZEhBA0mWMUUC56MrWQm7BW9HrKnBEDbtJM1BoQNo+ ansible"
+
+   
+  - name: add sudoers file for lulu
+    tags: always
+    copy:
+      src: sudoer_lulu
+      dest: /etc/sudoers.d/lulu
+      owner: root
+      group: root
+      mode: 0440
